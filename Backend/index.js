@@ -1,25 +1,34 @@
 import express from "express";
-const app = express();
 import dotenv from "dotenv";
-dotenv.config();
 import mongoose from "mongoose";
-import userRoutes from "./Routes/User.route.js";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
+import userRoute from "./routes/user.route.js";
+import messageRoute from "./routes/message.route.js";
+import { app, server } from "./SocketIO/server.js";
+
+dotenv.config();
+
+// middleware
 app.use(express.json());
+app.use(cookieParser());
+app.use(cors());
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4001;
 const URL = process.env.MONGODB_URL;
 
 try {
   mongoose.connect(URL);
-  console.log("DB Connected Successfully!");
+  console.log("Connected to MongoDB");
 } catch (error) {
   console.log(error);
 }
 
-// Routes
-app.use("/user", userRoutes);
+//routes
+app.use("/api/user", userRoute);
+app.use("/api/message", messageRoute);
 
-app.listen(PORT, () => {
-  console.log(`Server is Running on Port ${PORT}`);
+server.listen(PORT, () => {
+  console.log(`Server is Running on port ${PORT}`);
 });
