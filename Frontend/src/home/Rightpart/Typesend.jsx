@@ -7,28 +7,37 @@ function Typesend() {
   const { loading, sendMessages } = useSendMessage();
 
   const handleSubmit = async (e) => {
-    console.log(e);
     e.preventDefault();
-    await sendMessages(message);
+    if (!message.trim()) return; // Prevent empty or whitespace-only messages
+
+    await sendMessages(message.trim());
     setMessage("");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="flex space-x-1 h-[8vh]  bg-gray-800">
-        <div className=" w-[70%] mx-4">
-          <input
-            type="text"
-            placeholder="Type here"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            className="border border-gray-700 rounded-xl outline-none mt-1 px-4 py-3 w-full"
-          />
-        </div>
-        <button>
-          <IoSend className="text-3xl" />
-        </button>
-      </div>
+    <form
+      onSubmit={handleSubmit}
+      className="bg-gray-800 h-[8vh] flex items-center px-4 space-x-2"
+    >
+      <input
+        type="text"
+        placeholder="Type here"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        className="flex-1 border border-gray-700 rounded-xl outline-none px-4 py-2 bg-gray-900 text-white"
+        disabled={loading}
+      />
+      <button
+        type="submit"
+        disabled={loading || !message.trim()}
+        className={`text-3xl ${
+          loading || !message.trim()
+            ? "opacity-50 cursor-not-allowed"
+            : "text-blue-500 hover:text-blue-400"
+        }`}
+      >
+        <IoSend />
+      </button>
     </form>
   );
 }
