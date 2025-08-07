@@ -20,7 +20,7 @@ function Login() {
       password: data.password,
     };
     axios
-      .post("/api/user/login", userInfo)
+      .post("https://chat-app-12backend.vercel.app/api/user/login", userInfo)
       .then((response) => {
         if (response.data) {
           toast.success("Login successful");
